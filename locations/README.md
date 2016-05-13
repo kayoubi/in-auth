@@ -4,17 +4,17 @@ Steps to install
 ----------------
 
 * follow the instructions in `db-schema.sql`
-* load `tl_2012_us_state.shp` into the DB using the following command (I used `locate shp2pgsql` on Mac to find the utility)
+* load US boundaries (downloaded from [here](ftp://ftp2.census.gov/geo/tiger/TIGER2012/STATE/tl_2012_us_state.zip)) into the DB using the following command (I used `locate shp2pgsql` on Mac to find the utility)
 
-   `shp2pgsql -s 4269 -g geom_4269 -I -W "latin1" "{path-to-(resource/tl_2012_us_state)}" inauth.tl_2012_states | psql -h localhost -p 5432 -d inauth_locations -U postgres`
+   `shp2pgsql -s 4269 -g geom_4269 -I -W "latin1" "{path-to-resource}/tl_2012_us_state" inauth.tl_2012_states | psql -h localhost -p 5432 -d inauth_locations -U postgres`
 
 API usage
 ---------
-* `GET /inauth/locations` returns all locations in DB
+* `GET /inauth/locations` returns all locations in DB, optional params:
   * `details=true` returns all locations in DB with `inUSA` and `distances` details
   * `foramt=xml` must be used with `details=true` converts the result into xls file
 
-* `GET /inauth/locations/search?lng={lng}&lat={lat}` returns a particular location if found
+* `GET /inauth/locations/search?lng={lng}&lat={lat}` returns a particular location if found, optional params:
   * `details=true` returns the found location in DB with `inUSA` and `distances` details
   * `foramt=xml` must be used with `details=true` converts the result into xls file
  

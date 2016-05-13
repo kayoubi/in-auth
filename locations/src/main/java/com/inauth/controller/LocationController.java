@@ -106,7 +106,7 @@ public class LocationController {
 
     private void toXLS(HttpServletResponse response, List<DetailedLocationDTO> locations) throws Exception {
         response.setContentType("application/vnd.ms-excel");
-        response.addHeader("Content-Disposition", "attachment; filename=result.xls");
+        response.addHeader("Content-Disposition", "attachment; filename=locations.xls");
 
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet("locations");

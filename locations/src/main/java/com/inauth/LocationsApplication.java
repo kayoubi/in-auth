@@ -47,6 +47,7 @@ public class LocationsApplication extends SpringBootServletInitializer {
 
 	private void fixture() {
         locationService.deleteAll();
+        System.out.print("DB loading ");
 
         double minLat = -90.00;
         double maxLat = 90.00;
@@ -56,10 +57,12 @@ public class LocationsApplication extends SpringBootServletInitializer {
             double latitude = minLat + (Math.random() * ((maxLat - minLat) + 1));
             double longitude = minLng + (Math.random() * ((maxLng - minLng) + 1));
 
+            System.out.print(i%5==0 ? "." : "");
 //            DecimalFormat df = new DecimalFormat("#.#####");
 //            System.out.println("latitude:longitude --> " + df.format(latitude) + "," + df.format(longitude));
             locationService.save(new Location(longitude, latitude));
         }
+        System.out.println("");
     }
 
     private void cities(String key, String[] cities) throws Exception {
