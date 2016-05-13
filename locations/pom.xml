@@ -6,7 +6,8 @@
 	<groupId>com.inauth</groupId>
 	<artifactId>locations</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<!--<packaging>jar</packaging>-->
+    <packaging>war</packaging>
 
 	<name>locations</name>
 	<description>Demo project for Spring Boot</description>
@@ -69,6 +70,7 @@
     </dependencies>
 	
 	<build>
+        <finalName>inauth</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

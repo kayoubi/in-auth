@@ -1,12 +1,13 @@
--- install postgis extension
-CREATE EXTENSION postgis;
-CREATE EXTENSION postgis_topology;
-
 -- create DB
-create databae inauth_locations;
+create database inauth_locations with owner postgres;
+
 
 -- switch to DB
 -- \connect inauth_locations
+
+-- create postgis extension
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
 
 -- create schema
 create schema inauth;
