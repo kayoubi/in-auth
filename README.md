@@ -15,7 +15,7 @@ API usage
   * `foramt=xml` must be used with `details=true` converts the result into xls file
 
 * `GET /inauth/locations/search?lng={lng}&lat={lat}` returns a particular location if found, optional params:
-  * `details=true` returns the found location in DB with `inUSA` and `distances` details
+  * `details=true` returns the found location with `inUSA` and `distances` details
   * `foramt=xml` must be used with `details=true` converts the result into xls file
  
 * `POST /inauth/locations` create a new location if doesn't already exist

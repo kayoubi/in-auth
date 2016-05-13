@@ -1,6 +1,9 @@
 package com.inauth.controller;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -110,29 +113,38 @@ public class LocationController {
 
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet("locations");
+        CellStyle style = wb.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
         Row header = sheet.createRow(0);
         header.createCell(0).setCellValue("lng");
         header.createCell(1).setCellValue("lat");
         header.createCell(2).setCellValue("In USA");
         int i = 3;
         for (String city : cities) {
-            header.createCell(i++).setCellValue("Distance from " + city.replace("_", ", "));
+            header.createCell(i++).setCellValue(city.replace("_", ", "));
         }
 
         for (int j = 0; j < locations.size(); j++) {
             Row row = sheet.createRow(j + 1);
             row.createCell(0).setCellValue(locations.get(j).getLng());
             row.createCell(1).setCellValue(locations.get(j).getLat());
-            row.createCell(2).setCellValue(locations.get(j).isInUS());
+            Cell inUSCell = row.createCell(2);
+            inUSCell.setCellValue(locations.get(j).isInUS());
+            if (locations.get(j).isInUS()) {
+                inUSCell.setCellStyle(style);
+            }
             if (null != locations.get(j).getDistances()) {
                 int k = 3;
                 for (Distance distance : locations.get(j).getDistances()) {
-                    row.createCell(k++).setCellValue(distance.getDistance());
+                    Cell distanceCell = row.createCell(k++);
+                    distanceCell.setCellValue(distance.getDistance());
+                    if (distance.getDistance() < 500) {
+                        distanceCell.setCellStyle(style);
+                    }
                 }
             }
         }
-
         wb.write(response.getOutputStream());
-
     }
 }
