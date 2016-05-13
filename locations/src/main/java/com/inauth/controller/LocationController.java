@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.inauth.domain.Distance;
 import com.inauth.domain.Location;
+import com.inauth.model.DetailedLocationDTO;
 import com.inauth.model.LocationDTO;
 import com.inauth.service.LocationService;
 
@@ -45,9 +45,15 @@ public class LocationController {
     private String[] cities;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<LocationDTO> getAll(@RequestParam(required = false) String format, HttpServletResponse response) throws Exception {
+    public List<? extends LocationDTO> getAll(@RequestParam(required = false) String format, @RequestParam(required = false) boolean details,
+                                    HttpServletResponse response) throws Exception {
+
+        List<Location> all = locationService.findAll();
+        if (!details) {
+            return all.stream().map(l -> new LocationDTO(l.getLng(), l.getLat())).collect(Collectors.toList());
+        }
         Set<Long> inUS = locationService.findAllInUSA();
-        List<LocationDTO> result = locationService.findAll()
+        List<DetailedLocationDTO> result = all
             .stream()
             .map(l -> toDTO(l, inUS.contains(l.getId())))
             .collect(Collectors.toList());
@@ -56,13 +62,19 @@ public class LocationController {
             return null;
         }
         return result;
+
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.GET)
-    public LocationDTO search(@RequestParam String lng, @RequestParam String lat,
+    public LocationDTO search(@RequestParam String lng, @RequestParam String lat, @RequestParam(required = false) boolean details,
                               @RequestParam(required = false) String format, HttpServletResponse response) throws Exception {
         Location l = locationService.findByLonAndLat(Double.valueOf(lng), Double.valueOf(lat));
-        LocationDTO result = l != null ? toDTO(l, locationService.isInUs(l.getId())) : null;
+
+        if (!details) {
+            return new LocationDTO(l.getLng(), l.getLat());
+        }
+
+        DetailedLocationDTO result = l != null ? toDTO(l, locationService.isInUs(l.getId())) : null;
         if (null != format && format.equals("xls")) {
             toXLS(response, Collections.singletonList(result));
             return null;
@@ -73,7 +85,7 @@ public class LocationController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> save(@RequestBody LocationDTO location, UriComponentsBuilder uriComponentsBuilder) {
         Location l = locationService.save(new Location(location.getLng(), location.getLat()));
-        
+
         UriComponents uriComponents = uriComponentsBuilder
             .path(BASE_URI + "/search?lng={lng}&lat={lat}")
             .buildAndExpand(l.getLng(), l.getLat());
@@ -83,10 +95,8 @@ public class LocationController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    private LocationDTO toDTO(Location location, boolean inUSA) {
-        LocationDTO dto = new LocationDTO();
-        dto.setLat(location.getLat());
-        dto.setLng(location.getLng());
+    private DetailedLocationDTO toDTO(Location location, boolean inUSA) {
+        DetailedLocationDTO dto = new DetailedLocationDTO(location.getLng(), location.getLat());
         dto.setInUS(inUSA);
         if (!inUSA) {
             dto.setDistances(locationService.findDistances(location.getId()));
@@ -94,7 +104,7 @@ public class LocationController {
         return dto;
     }
 
-    private void toXLS(HttpServletResponse response, List<LocationDTO> locations) throws Exception {
+    private void toXLS(HttpServletResponse response, List<DetailedLocationDTO> locations) throws Exception {
         response.setContentType("application/vnd.ms-excel");
         response.addHeader("Content-Disposition", "attachment; filename=result.xls");
 

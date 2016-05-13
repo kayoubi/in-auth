@@ -1,17 +1,16 @@
 package com.inauth.model;
 
-import com.inauth.domain.Distance;
-
-import java.util.List;
-
 /**
  * @author Khaled Ayoubi
  */
 public class LocationDTO {
     private double lng;
     private double lat;
-    private boolean inUS;
-    private List<Distance> distances;
+
+    public LocationDTO(double lng, double lat) {
+        this.lng = lng;
+        this.lat = lat;
+    }
 
     public double getLng() {
         return lng;
@@ -29,20 +28,5 @@ public class LocationDTO {
         this.lat = lat;
     }
 
-    public boolean isInUS() {
-        return inUS;
-    }
-
-    public void setInUS(boolean inUS) {
-        this.inUS = inUS;
-    }
-
-    public List<Distance> getDistances() {
-        return distances;
-    }
-
-    public void setDistances(List<Distance> distances) {
-        this.distances = distances;
-    }
 }
 
