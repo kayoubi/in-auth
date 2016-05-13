@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(LocationController.BASE_URI)
 public class LocationController {
-    protected static final String BASE_URI = "/inauth/locations";
+    protected static final String BASE_URI = "/locations";
 
     @Autowired
     private LocationService locationService;

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -16,7 +18,7 @@ import com.inauth.service.LocationService;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
-public class LocationsApplication {
+public class LocationsApplication extends SpringBootServletInitializer {
     @Autowired
     private LocationService locationService;
     @Autowired
@@ -37,6 +39,11 @@ public class LocationsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LocationsApplication.class, args);
 	}
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(LocationsApplication.class);
+    }
 
 	private void fixture() {
         locationService.deleteAll();

@@ -27,7 +27,7 @@ API usage
 Start the application
 ---------------------
    
-* Embedded Tomcat: go to root directory and run `mvn spring-boot:run`
+* Embedded Tomcat: go to the root directory and run `mvn spring-boot:run` (the server starts at port `7777`)
 * Stand alone container: either build the war file using `mvn clean install` and copy `target/inuath.war` to tomcat or download from [here](https://www.dropbox.com/s/881ruklijziqk2u/inauth.war?dl=0)
 * The application uses Google Geocoding API to get the list of cities locations (in `application.properties`) and store them in the DB at startup time, so the system has to be online, another appoach could have been do store these in a fixture and load to the DB, but I though it was nice to be able to add cities by modifying the config file     
 
