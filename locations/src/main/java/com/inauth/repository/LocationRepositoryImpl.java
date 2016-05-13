@@ -18,7 +18,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * @author Khaled Ayoubi
@@ -109,6 +108,11 @@ public class LocationRepositoryImpl implements LocationRepository {
         }, keyHolder);
 
         return keyHolder.getKey().longValue();
+    }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.execute("delete from inauth.locations");
     }
 
     private String buildInClause(int batchSize) {

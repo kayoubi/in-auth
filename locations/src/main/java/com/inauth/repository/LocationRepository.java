@@ -26,4 +26,6 @@ public interface LocationRepository extends Repository<Location, Long> {
     Location findByLonAndLat(double lng, double lat);
 
     Long save(Location location);
+
+    void deleteAll();
 }

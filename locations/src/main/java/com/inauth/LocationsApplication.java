@@ -39,6 +39,8 @@ public class LocationsApplication {
 	}
 
 	private void fixture() {
+        locationService.deleteAll();
+
         double minLat = -90.00;
         double maxLat = 90.00;
         double minLng = -180.00;

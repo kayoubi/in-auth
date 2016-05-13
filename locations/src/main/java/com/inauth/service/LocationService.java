@@ -69,6 +69,10 @@ public class LocationService {
         return locationRepository.get(id);
     }
 
+    public void deleteAll() {
+        locationRepository.deleteAll();
+    }
+
     public List<Distance> findDistances(Long id) {
         return locationRepository.findDistances(id);
     }
