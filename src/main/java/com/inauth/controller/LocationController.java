@@ -139,7 +139,7 @@ public class LocationController {
                 for (Distance distance : locations.get(j).getDistances()) {
                     Cell distanceCell = row.createCell(k++);
                     distanceCell.setCellValue(distance.getDistance());
-                    if (distance.getDistance() < 500) {
+                    if (distance.isWithin500()) {
                         distanceCell.setCellStyle(style);
                     }
                 }

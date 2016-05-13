@@ -21,4 +21,8 @@ public class Distance {
     public Double getDistance() {
         return distance;
     }
+
+    public boolean isWithin500() {
+        return getDistance() <= 500;
+    }
 }
