@@ -6,11 +6,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.inauth.domain.Distance;
 import com.inauth.domain.Location;
@@ -28,8 +34,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author Khaled Ayoubi
  */
 @RestController
-@RequestMapping("/inauth/locations")
+@RequestMapping(LocationController.BASE_URI)
 public class LocationController {
+    protected static final String BASE_URI = "/inauth/locations";
+
     @Autowired
     private LocationService locationService;
 
@@ -63,9 +71,16 @@ public class LocationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public LocationDTO save(@RequestBody LocationDTO location) {
+    public ResponseEntity<Void> save(@RequestBody LocationDTO location, UriComponentsBuilder uriComponentsBuilder) {
         Location l = locationService.save(new Location(location.getLng(), location.getLat()));
-        return toDTO(l, locationService.isInUs(l.getId()));
+        
+        UriComponents uriComponents = uriComponentsBuilder
+            .path(BASE_URI + "/search?lng={lng}&lat={lat}")
+            .buildAndExpand(l.getLng(), l.getLat());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(uriComponents.toUri());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     private LocationDTO toDTO(Location location, boolean inUSA) {
