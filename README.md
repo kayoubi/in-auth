@@ -12,11 +12,11 @@ API usage
 ---------
 * `GET /inauth/locations` returns all locations in DB, optional params:
   * `details=true` returns all locations in DB with `inUSA` and `distances` details
-  * `foramt=xml` must be used with `details=true` converts the result into xls file
+  * `foramt=xls` must be used with `details=true` converts the result into xls file
 
 * `GET /inauth/locations/search?lng={lng}&lat={lat}` returns a particular location if found, optional params:
   * `details=true` returns the found location with `inUSA` and `distances` details
-  * `foramt=xml` must be used with `details=true` converts the result into xls file
+  * `foramt=xls` must be used with `details=true` converts the result into xls file
  
 * `POST /inauth/locations` create a new location if doesn't already exist
   * header `Content-Type=application/json;charset=UTF-8`
